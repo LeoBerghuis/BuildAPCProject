@@ -1,20 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}BuildAPC - Home{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">BuildAPC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">System Builder</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Browse Parts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Guides</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<header class="bg-light py-5 text-center">
+    <div class="container">
+        <h1 class="display-4">Welcome to BuildAPC</h1>
+        <p class="lead">Plan and build your perfect PC with ease.</p>
+        <a href="#" class="btn btn-primary btn-lg mt-3">Start Building</a>
+    </div>
+</header>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/leobe/Documents/School/school/BuildAPC/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/leobe/Documents/School/school/BuildAPC/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">Popular Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Processors (CPUs)</h5>
+                        <p class="card-text">Browse the latest and greatest CPUs from Intel and AMD.</p>
+                        <a href="#" class="btn btn-outline-primary">View CPUs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Graphics Cards (GPUs)</h5>
+                        <p class="card-text">Find the perfect graphics card for gaming, editing, or streaming.</p>
+                        <a href="#" class="btn btn-outline-primary">View GPUs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Memory (RAM)</h5>
+                        <p class="card-text">Get high-speed RAM to power your applications and games.</p>
+                        <a href="#" class="btn btn-outline-primary">View RAM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
