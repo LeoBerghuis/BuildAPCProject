@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 02:41 PM
+-- Generation Time: Jun 02, 2025 at 04:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,8 +59,22 @@ CREATE TABLE `build` (
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) NOT NULL,
+  `img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `name`, `img`) VALUES
+(1, 'cpu', 'cpu_base'),
+(2, 'gpu', 'gpu_base'),
+(3, 'motherboard', 'motherboard_base'),
+(4, 'ram', 'ram_base'),
+(5, 'storage', 'storage_base'),
+(6, 'power supply', 'power_supply_base'),
+(7, 'case', 'case_base');
 
 -- --------------------------------------------------------
 
@@ -80,7 +94,8 @@ CREATE TABLE `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20250528145118', '2025-05-28 17:04:04', 382);
+('DoctrineMigrations\\Version20250528145118', '2025-05-28 17:04:04', 382),
+('DoctrineMigrations\\Version20250602142601', '2025-06-02 16:26:06', 7);
 
 -- --------------------------------------------------------
 
@@ -230,7 +245,7 @@ ALTER TABLE `build`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`
