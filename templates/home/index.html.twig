@@ -7,7 +7,7 @@
 {% block title %}BuildAPC - Home{% endblock %}
 
 {% block body %}
-    {% include 'navbar.html.twig' %}
+    {% include 'navbar.html.twig' with {'categories': categories} %}
 
     <div class="main">
         <div class="bg-light py-5 text-center">

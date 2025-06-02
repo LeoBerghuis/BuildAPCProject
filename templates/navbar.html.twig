@@ -34,24 +34,13 @@
         Products
     </button>
     <div class="dropdown-menu p-3" aria-labelledby="productsDropdown" style="min-width: 250px;">
+        {% for category in categories %}
         <a href="#" class="card mb-2 text-decoration-none text-dark">
             <div class="card-body p-2">
-                <h6 class="card-title mb-0">CPU</h6>
-                <p class="card-text small mb-0">Processors and CPUs</p>
+                <h6 class="card-title mb-0">{{ category.name }}</h6>
             </div>
         </a>
-        <a href="#" class="card mb-2 text-decoration-none text-dark">
-            <div class="card-body p-2">
-                <h6 class="card-title mb-0">Motherboard</h6>
-                <p class="card-text small mb-0">Mainboards for your build</p>
-            </div>
-        </a>
-        <a href="#" class="card mb-2 text-decoration-none text-dark">
-            <div class="card-body p-2">
-                <h6 class="card-title mb-0">GPU</h6>
-                <p class="card-text small mb-0">Graphics cards</p>
-            </div>
-        </a>
+        {% endfor %}
     </div>
 </div>
 
