@@ -1,72 +1,30 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
 {% block title %}BuildAPC - Home{% endblock %}
 
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">BuildAPC</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">System Builder</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Browse Parts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Guides</a>
-                </li>
-            </ul>
+    {% include 'navbar.html.twig' %}
+
+    <div class="main">
+        <div class="bg-light py-5 text-center">
+            <div class="container">
+                <h1 class="display-4">Welcome to BuildAPC</h1>
+                <p class="lead">Plan and build your perfect PC with ease.</p>
+                <a href="#" class="btn btn-primary btn-lg mt-3">Start Building</a>
+            </div>
         </div>
-    </div>
-</nav>
 
-<header class="bg-light py-5 text-center">
-    <div class="container">
-        <h1 class="display-4">Welcome to BuildAPC</h1>
-        <p class="lead">Plan and build your perfect PC with ease.</p>
-        <a href="#" class="btn btn-primary btn-lg mt-3">Start Building</a>
-    </div>
-</header>
-
-<section class="py-5">
-    <div class="container">
-        <h2 class="mb-4">Popular Categories</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Processors (CPUs)</h5>
-                        <p class="card-text">Browse the latest and greatest CPUs from Intel and AMD.</p>
-                        <a href="#" class="btn btn-outline-primary">View CPUs</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Graphics Cards (GPUs)</h5>
-                        <p class="card-text">Find the perfect graphics card for gaming, editing, or streaming.</p>
-                        <a href="#" class="btn btn-outline-primary">View GPUs</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Memory (RAM)</h5>
-                        <p class="card-text">Get high-speed RAM to power your applications and games.</p>
-                        <a href="#" class="btn btn-outline-primary">View RAM</a>
-                    </div>
-                </div>
+        <div class="container mb-5">
+            <h2 class="mb-4">Popular Categories</h2>
+            <div class="row g-4">
+                <!-- your cards here -->
             </div>
         </div>
     </div>
-</section>
+
+    {% include 'footer.html.twig' %}
 {% endblock %}
