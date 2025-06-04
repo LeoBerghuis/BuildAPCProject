@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\BuildRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Products;
 
 #[ORM\Entity(repositoryClass: BuildRepository::class)]
 class Build
@@ -17,7 +18,7 @@ class Build
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'builds')]
-    private ?users $user = null;
+    private ?Users $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -28,10 +29,8 @@ class Build
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $created_at = null;
 
-    /**
-     * @var Collection<int, products>
-     */
-    #[ORM\OneToMany(targetEntity: products::class, mappedBy: 'build')]
+    #[ORM\ManyToMany(targetEntity: Products::class)]
+    #[ORM\JoinTable(name: 'build_products')]
     private Collection $products;
 
     public function __construct()
@@ -39,17 +38,18 @@ class Build
         $this->products = new ArrayCollection();
     }
 
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?users
+    public function getUser(): ?Users
     {
         return $this->user;
     }
 
-    public function setUser(?users $user): static
+    public function setUser(?Users $user): static
     {
         $this->user = $user;
 
@@ -92,32 +92,23 @@ class Build
         return $this;
     }
 
-    /**
-     * @return Collection<int, products>
-     */
     public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct(products $product): static
+    public function addProduct(Products $product): static
     {
         if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setBuild($this);
+            $this->products[] = $product;
         }
 
         return $this;
     }
 
-    public function removeProduct(products $product): static
+    public function removeProduct(Products $product): static
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getBuild() === $this) {
-                $product->setBuild(null);
-            }
-        }
+        $this->products->removeElement($product);
 
         return $this;
     }

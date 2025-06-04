@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2025 at 04:37 PM
+-- Generation Time: Jun 04, 2025 at 11:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,6 +53,18 @@ CREATE TABLE `build` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `build_products`
+--
+
+DROP TABLE IF EXISTS `build_products`;
+CREATE TABLE `build_products` (
+  `build_id` int(11) NOT NULL,
+  `products_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `category`
 --
 
@@ -95,7 +107,8 @@ CREATE TABLE `doctrine_migration_versions` (
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
 ('DoctrineMigrations\\Version20250528145118', '2025-05-28 17:04:04', 382),
-('DoctrineMigrations\\Version20250602142601', '2025-06-02 16:26:06', 7);
+('DoctrineMigrations\\Version20250602142601', '2025-06-02 16:26:06', 7),
+('DoctrineMigrations\\Version20250604215815', '2025-06-04 23:58:18', 151);
 
 -- --------------------------------------------------------
 
@@ -141,7 +154,6 @@ CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `brand_id` int(11) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `build_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
@@ -183,6 +195,14 @@ ALTER TABLE `build`
   ADD KEY `IDX_BDA0F2DBA76ED395` (`user_id`);
 
 --
+-- Indexes for table `build_products`
+--
+ALTER TABLE `build_products`
+  ADD PRIMARY KEY (`build_id`,`products_id`),
+  ADD KEY `IDX_5799002C17C13F8B` (`build_id`),
+  ADD KEY `IDX_5799002C6C8A81A9` (`products_id`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -215,9 +235,8 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_B3BA5A5A44F5D008` (`brand_id`),
-  ADD UNIQUE KEY `UNIQ_B3BA5A5A12469DE2` (`category_id`),
-  ADD KEY `IDX_B3BA5A5A17C13F8B` (`build_id`);
+  ADD KEY `IDX_B3BA5A5A44F5D008` (`brand_id`),
+  ADD KEY `IDX_B3BA5A5A12469DE2` (`category_id`);
 
 --
 -- Indexes for table `users`
@@ -282,6 +301,13 @@ ALTER TABLE `build`
   ADD CONSTRAINT `FK_BDA0F2DBA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
+-- Constraints for table `build_products`
+--
+ALTER TABLE `build_products`
+  ADD CONSTRAINT `FK_5799002C17C13F8B` FOREIGN KEY (`build_id`) REFERENCES `build` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_5799002C6C8A81A9` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -292,7 +318,6 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `FK_B3BA5A5A12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `FK_B3BA5A5A17C13F8B` FOREIGN KEY (`build_id`) REFERENCES `build` (`id`),
   ADD CONSTRAINT `FK_B3BA5A5A44F5D008` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`);
 COMMIT;
 

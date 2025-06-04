@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\ProductsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Build;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -17,11 +20,13 @@ class Products
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?brand $brand = null;
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Brand $brand = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?category $category = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
+
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
@@ -35,8 +40,18 @@ class Products
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?Build $build = null;
+    #[ORM\ManyToMany(targetEntity: Build::class, mappedBy: 'products')]
+    private Collection $builds;
+
+    public function __construct()
+    {
+        $this->builds = new ArrayCollection();
+    }
+
+    public function getBuilds(): Collection
+    {
+        return $this->builds;
+    }
 
     public function getId(): ?int
     {
@@ -55,24 +70,24 @@ class Products
         return $this;
     }
 
-    public function getBrand(): ?brand
+    public function getBrand(): ?Brand
     {
         return $this->brand;
     }
 
-    public function setBrand(?brand $brand): static
+    public function setBrand(?Brand $brand): static
     {
         $this->brand = $brand;
 
         return $this;
     }
 
-    public function getCategory(): ?category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
@@ -123,18 +138,6 @@ class Products
     public function setImage(string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getBuild(): ?Build
-    {
-        return $this->build;
-    }
-
-    public function setBuild(?Build $build): static
-    {
-        $this->build = $build;
 
         return $this;
     }

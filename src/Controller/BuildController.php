@@ -23,7 +23,7 @@ final class BuildController extends AbstractController
             'memory' => $ProductRepository->findBy(['category' => 5]),
             'powersupply' => $ProductRepository->findBy(['category' => 6]),
             'case' => $ProductRepository->findBy(['category' => 7]),
-            'categories' => $categories,  // pass categories here
+            'categories' => $categories,
 
         ]);
     }
