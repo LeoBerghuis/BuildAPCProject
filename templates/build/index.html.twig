@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="mb-4">🛠️ Build Your PC</h1>
+
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="cpu" class="form-label">CPU</label>
+                    <select class="form-select" id="cpu" name="cpu" required>
+                        <option value="" disabled selected>Choose your CPU</option>
+                        {% for item in cpus %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="gpu" class="form-label">GPU</label>
+                    <select class="form-select" id="gpu" name="gpu" required>
+                        <option value="" disabled selected>Choose your GPU</option>
+                        {% for item in gpu %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="motherboard" class="form-label">Motherboard</label>
+                    <select class="form-select" id="motherboard" name="motherboard" required>
+                        <option value="" disabled selected>Choose your Motherboard</option>
+                        {% for item in motherboards %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ram" class="form-label">RAM</label>
+                    <select class="form-select" id="ram" name="ram" required>
+                        <option value="" disabled selected>Choose your RAM</option>
+                        {% for item in rams %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="memory" class="form-label">Storage</label>
+                    <select class="form-select" id="memory" name="memory" required>
+                        <option value="" disabled selected>Choose your Storage</option>
+                        {% for item in memory %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="powersupply" class="form-label">Power Supply</label>
+                    <select class="form-select" id="powersupply" name="powersupply" required>
+                        <option value="" disabled selected>Choose your PSU</option>
+                        {% for item in powersupply %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="case" class="form-label">Case</label>
+                    <select class="form-select" id="case" name="case" required>
+                        <option value="" disabled selected>Choose your Case</option>
+                        {% for item in case %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Submit Build</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
