@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Products;
 use App\Form\ProductForm;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,14 +35,15 @@ final class ProductController extends AbstractController
         ]);
     }
     #[Route('/product/{id}', name: 'app_product')]
-    public function index(int $id, EntityManagerInterface $entitymanager): Response
+    public function index(int $id, EntityManagerInterface $entitymanager, ProductRepository $productRepository): Response
     {
         $categories = $entitymanager->getRepository(Category::class)->findAll();
+        $products = $productRepository->findByCategory($id);
         return $this->render('product/index.html.twig', [
             'controller_name' => 'ProductController',
             'category_id' => $id,
             'categories' => $categories,
-//            'product' => $product
+            'products' => $products
         ]);
     }
 
