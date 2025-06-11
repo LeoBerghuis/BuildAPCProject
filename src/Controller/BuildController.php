@@ -15,12 +15,7 @@ use App\Repository\ProductRepository;
 final class BuildController extends AbstractController
 {
     #[Route('/build', name: 'app_build')]
-    public function index(
-        Request $request,
-        ProductRepository $productRepository,
-        EntityManagerInterface $entityManager,
-        SessionInterface $session
-    ): Response
+    public function index(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
         if ($request->isMethod('POST')) {
@@ -87,24 +82,27 @@ final class BuildController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $buildData = $session->get('pc_build', []);
-
         if (empty($buildData)) {
             return $this->redirectToRoute('app_cart');
         }
+        $build = new Build();
+        $build->setUser($user);
+        $build->setName('Build by ' . $user->getUserIdentifier());
+        $build->setIsPublic(true);
+        $build->setCreatedAt(new \DateTime());
 
-        $newBuild = new Build();
-        $newBuild->setName('testbuild');
-        $newBuild->setIsPublic(true);
-        $newBuild->setCreatedAt(new \DateTime());
         foreach ($buildData as $productId) {
             $product = $productRepository->find($productId);
             if ($product) {
-                $newBuild->addProduct($product);
+                $build->addProduct($product);
             }
         }
-        $entityManager->persist($newBuild);
+
+        $entityManager->persist($build);
         $entityManager->flush();
+
         $session->remove('pc_build');
+
         return $this->redirectToRoute('app_home');
     }
 }

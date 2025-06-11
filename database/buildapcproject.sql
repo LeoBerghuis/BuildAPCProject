@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2025 at 10:36 PM
+-- Generation Time: Jun 11, 2025 at 02:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -79,8 +79,16 @@ CREATE TABLE `build` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `is_public` tinyint(1) NOT NULL,
-  `created_at` date NOT NULL
+  `created_at` date NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `build`
+--
+
+INSERT INTO `build` (`id`, `name`, `is_public`, `created_at`, `user_id`) VALUES
+(1, 'Build by leoberghuis@gmail.com', 1, '2025-06-11', 2);
 
 -- --------------------------------------------------------
 
@@ -93,6 +101,19 @@ CREATE TABLE `build_products` (
   `build_id` int(11) NOT NULL,
   `products_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `build_products`
+--
+
+INSERT INTO `build_products` (`build_id`, `products_id`) VALUES
+(1, 5),
+(1, 12),
+(1, 18),
+(1, 23),
+(1, 41),
+(1, 55),
+(1, 63);
 
 -- --------------------------------------------------------
 
@@ -142,7 +163,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20250602142601', '2025-06-02 16:26:06', 7),
 ('DoctrineMigrations\\Version20250604215815', '2025-06-10 07:59:31', 88),
 ('DoctrineMigrations\\Version20250610082343', '2025-06-10 08:24:58', 46),
-('DoctrineMigrations\\Version20250610082556', '2025-06-10 08:26:00', 6);
+('DoctrineMigrations\\Version20250610082556', '2025-06-10 08:26:00', 6),
+('DoctrineMigrations\\Version20250611101749', '2025-06-11 10:17:58', 48);
 
 -- --------------------------------------------------------
 
@@ -214,30 +236,30 @@ INSERT INTO `products` (`id`, `brand_id`, `category_id`, `name`, `price`, `stock
 (13, 24, 2, 'Sapphire RX 7900 XTX', 850.00, 2, 'Sapphire RX 7900 XTX', 'images/amd_gpu_7900xtx.jpg'),
 (14, 23, 2, 'PowerColor RX 6600', 250.00, 6, 'PowerColor RX 6600', 'images/amd_gpu_6600.jpg'),
 (15, 22, 2, 'ZOTAC RTX 3060 Twin Edge', 330.00, 5, 'ZOTAC RTX 3060 Twin Edge', 'images/zotac_gpu_3060.jpg'),
-(16, 2, 3, 'Corsair Vengeance 16GB DDR4', 60.00, 20, 'Corsair Vengeance 16GB DDR4', 'images/corsair_ram_base.jpg'),
-(17, 2, 3, 'Corsair Vengeance RGB 16GB DDR5', 80.00, 18, 'Corsair Vengeance RGB 16GB DDR5', 'images/corsair_ram_rgb.jpg'),
-(18, 12, 3, 'G.Skill Ripjaws 16GB DDR4', 65.00, 22, 'G.Skill Ripjaws 16GB DDR4', 'images/gskill_ram_base.jpg'),
-(19, 12, 3, 'G.Skill Trident Z 32GB DDR5', 130.00, 10, 'G.Skill Trident Z 32GB DDR5', 'images/gskill_ram_ddr5.jpg'),
-(20, 13, 3, 'ADATA XPG 16GB DDR4 RGB', 75.00, 18, 'ADATA XPG 16GB DDR4 RGB', 'images/adata_ram_rgb.jpg'),
-(21, 14, 3, 'Patriot Viper Steel 16GB', 55.00, 25, 'Patriot Viper Steel 16GB', 'images/patriot_ram_base.jpg'),
-(22, 2, 3, 'Corsair Vengeance 32GB DDR5', 120.00, 12, 'Corsair Vengeance 32GB DDR5', 'images/corsair_ram_32gb.jpg'),
-(23, 15, 4, 'Samsung 980 1TB NVMe SSD', 95.00, 30, 'Samsung 980 1TB NVMe SSD', 'images/samsung_ssd_1tb.jpg'),
-(24, 16, 4, 'WD Blue 1TB HDD', 50.00, 40, 'WD Blue 1TB HDD', 'images/wd_hdd_1tb.jpg'),
-(25, 17, 4, 'Seagate Barracuda 2TB HDD', 70.00, 25, 'Seagate Barracuda 2TB HDD', 'images/seagate_hdd_2tb.jpg'),
-(26, 18, 4, 'Crucial MX500 500GB SSD', 45.00, 35, 'Crucial MX500 500GB SSD', 'images/crucial_ssd_500gb.jpg'),
-(27, 15, 4, 'Samsung 980 Pro 2TB NVMe', 160.00, 20, 'Samsung 980 Pro 2TB NVMe', 'images/samsung_ssd_2tb.jpg'),
-(28, 16, 4, 'WD Black SN770 1TB SSD', 100.00, 18, 'WD Black SN770 1TB SSD', 'images/wd_black_sn770.jpg'),
-(29, 2, 5, 'Corsair RM650x 80+ Gold', 85.00, 12, 'Corsair RM650x 80+ Gold', 'images/corsair_psu_650w.jpg'),
-(30, 8, 5, 'Thermaltake 750W Toughpower', 95.00, 10, 'Thermaltake 750W Toughpower', 'images/tt_psu_750w.jpg'),
-(31, 6, 5, 'EVGA 550 B5 Bronze', 65.00, 15, 'EVGA 550 B5 Bronze', 'images/evga_psu_550w.jpg'),
-(32, 1, 5, 'ASUS ROG Thor 850W Platinum', 110.00, 8, 'ASUS ROG Thor 850W Platinum', 'images/asus_psu_850w.jpg'),
-(33, 3, 5, 'MSI MPG A750GF 80+ Gold', 100.00, 10, 'MSI MPG A750GF 80+ Gold', 'images/msi_psu_750w.jpg'),
-(34, 1, 6, 'ASUS TUF Gaming B550-Plus', 140.00, 10, 'ASUS TUF Gaming B550-Plus', 'images/asus_mobo_b550.jpg'),
-(35, 3, 6, 'MSI B550M PRO-VDH', 125.00, 9, 'MSI B550M PRO-VDH', 'images/msi_mobo_b550m.jpg'),
-(36, 4, 6, 'Gigabyte Z690 AORUS Elite', 220.00, 6, 'Gigabyte Z690 AORUS Elite', 'images/gigabyte_mobo_z690.jpg'),
-(37, 5, 6, 'ASRock B660M Pro RS', 135.00, 11, 'ASRock B660M Pro RS', 'images/asrock_mobo_b660.jpg'),
-(38, 1, 6, 'ASUS ROG Crosshair X670E', 350.00, 4, 'ASUS ROG Crosshair X670E', 'images/asus_mobo_x670e.jpg'),
-(39, 3, 6, 'MSI MPG X570 GAMING PLUS', 199.00, 7, 'MSI MPG X570 GAMING PLUS', 'images/msi_mobo_x570.jpg'),
+(16, 2, 4, 'Corsair Vengeance 16GB DDR4', 60.00, 20, 'Corsair Vengeance 16GB DDR4', 'images/corsair_ram_base.jpg'),
+(17, 2, 4, 'Corsair Vengeance RGB 16GB DDR5', 80.00, 18, 'Corsair Vengeance RGB 16GB DDR5', 'images/corsair_ram_rgb.jpg'),
+(18, 12, 4, 'G.Skill Ripjaws 16GB DDR4', 65.00, 22, 'G.Skill Ripjaws 16GB DDR4', 'images/gskill_ram_base.jpg'),
+(19, 12, 4, 'G.Skill Trident Z 32GB DDR5', 130.00, 10, 'G.Skill Trident Z 32GB DDR5', 'images/gskill_ram_ddr5.jpg'),
+(20, 13, 4, 'ADATA XPG 16GB DDR4 RGB', 75.00, 18, 'ADATA XPG 16GB DDR4 RGB', 'images/adata_ram_rgb.jpg'),
+(21, 14, 4, 'Patriot Viper Steel 16GB', 55.00, 25, 'Patriot Viper Steel 16GB', 'images/patriot_ram_base.jpg'),
+(22, 2, 4, 'Corsair Vengeance 32GB DDR5', 120.00, 12, 'Corsair Vengeance 32GB DDR5', 'images/corsair_ram_32gb.jpg'),
+(23, 15, 5, 'Samsung 980 1TB NVMe SSD', 95.00, 30, 'Samsung 980 1TB NVMe SSD', 'images/samsung_ssd_1tb.jpg'),
+(24, 16, 5, 'WD Blue 1TB HDD', 50.00, 40, 'WD Blue 1TB HDD', 'images/wd_hdd_1tb.jpg'),
+(25, 17, 5, 'Seagate Barracuda 2TB HDD', 70.00, 25, 'Seagate Barracuda 2TB HDD', 'images/seagate_hdd_2tb.jpg'),
+(26, 18, 5, 'Crucial MX500 500GB SSD', 45.00, 35, 'Crucial MX500 500GB SSD', 'images/crucial_ssd_500gb.jpg'),
+(27, 15, 5, 'Samsung 980 Pro 2TB NVMe', 160.00, 20, 'Samsung 980 Pro 2TB NVMe', 'images/samsung_ssd_2tb.jpg'),
+(28, 16, 5, 'WD Black SN770 1TB SSD', 100.00, 18, 'WD Black SN770 1TB SSD', 'images/wd_black_sn770.jpg'),
+(29, 2, 6, 'Corsair RM650x 80+ Gold', 85.00, 12, 'Corsair RM650x 80+ Gold', 'images/corsair_psu_650w.jpg'),
+(30, 8, 6, 'Thermaltake 750W Toughpower', 95.00, 10, 'Thermaltake 750W Toughpower', 'images/tt_psu_750w.jpg'),
+(31, 6, 6, 'EVGA 550 B5 Bronze', 65.00, 15, 'EVGA 550 B5 Bronze', 'images/evga_psu_550w.jpg'),
+(32, 1, 6, 'ASUS ROG Thor 850W Platinum', 110.00, 8, 'ASUS ROG Thor 850W Platinum', 'images/asus_psu_850w.jpg'),
+(33, 3, 6, 'MSI MPG A750GF 80+ Gold', 100.00, 10, 'MSI MPG A750GF 80+ Gold', 'images/msi_psu_750w.jpg'),
+(34, 1, 3, 'ASUS TUF Gaming B550-Plus', 140.00, 10, 'ASUS TUF Gaming B550-Plus', 'images/asus_mobo_b550.jpg'),
+(35, 3, 3, 'MSI B550M PRO-VDH', 125.00, 9, 'MSI B550M PRO-VDH', 'images/msi_mobo_b550m.jpg'),
+(36, 4, 3, 'Gigabyte Z690 AORUS Elite', 220.00, 6, 'Gigabyte Z690 AORUS Elite', 'images/gigabyte_mobo_z690.jpg'),
+(37, 5, 3, 'ASRock B660M Pro RS', 135.00, 11, 'ASRock B660M Pro RS', 'images/asrock_mobo_b660.jpg'),
+(38, 1, 3, 'ASUS ROG Crosshair X670E', 350.00, 4, 'ASUS ROG Crosshair X670E', 'images/asus_mobo_x670e.jpg'),
+(39, 3, 3, 'MSI MPG X570 GAMING PLUS', 199.00, 7, 'MSI MPG X570 GAMING PLUS', 'images/msi_mobo_x570.jpg'),
 (40, 9, 7, 'Cooler Master H500', 100.00, 10, 'Cooler Master H500', 'images/coolermaster_case_h500.jpg'),
 (41, 7, 7, 'NZXT H510 Mid Tower', 85.00, 15, 'NZXT H510 Mid Tower', 'images/nzxt_case_h510.jpg'),
 (42, 3, 7, 'MSI MAG Forge 100R', 90.00, 8, 'MSI MAG Forge 100R', 'images/msi_case_gungnir.jpg'),
@@ -247,26 +269,26 @@ INSERT INTO `products` (`id`, `brand_id`, `category_id`, `name`, `price`, `stock
 (46, 20, 1, 'AMD Ryzen 5 5500', 130.00, 12, 'AMD Ryzen 5 5500', 'images/amd_5500.jpg'),
 (47, 21, 2, 'NVIDIA RTX 4060', 299.00, 10, 'NVIDIA RTX 4060', 'images/nvidia_4060.jpg'),
 (48, 23, 2, 'PowerColor RX 6650 XT', 280.00, 10, 'PowerColor RX 6650 XT', 'images/amd_6650xt.jpg'),
-(49, 12, 3, 'G.Skill Trident Z 64GB DDR5', 250.00, 5, 'G.Skill Trident Z 64GB DDR5', 'images/gskill_64gb.jpg'),
-(50, 13, 3, 'ADATA 32GB DDR4 XPG', 115.00, 7, 'ADATA 32GB DDR4 XPG', 'images/adata_32gb.jpg'),
-(51, 16, 4, 'WD Blue 4TB HDD', 90.00, 10, 'WD Blue 4TB HDD', 'images/wd_4tb.jpg'),
-(52, 17, 4, 'Seagate 8TB HDD', 140.00, 6, 'Seagate 8TB HDD', 'images/seagate_8tb.jpg'),
-(53, 18, 4, 'Crucial P3 Plus 2TB', 170.00, 4, 'Crucial P3 Plus 2TB', 'images/crucial_2tb.jpg'),
-(54, 6, 5, 'EVGA 850 GQ', 120.00, 8, 'EVGA 850 GQ', 'images/evga_850.jpg'),
-(55, 5, 6, 'ASRock Z790 Pro RS', 240.00, 5, 'ASRock Z790 Pro RS', 'images/asrock_z790.jpg'),
+(49, 12, 4, 'G.Skill Trident Z 64GB DDR5', 250.00, 5, 'G.Skill Trident Z 64GB DDR5', 'images/gskill_64gb.jpg'),
+(50, 13, 4, 'ADATA 32GB DDR4 XPG', 115.00, 7, 'ADATA 32GB DDR4 XPG', 'images/adata_32gb.jpg'),
+(51, 16, 5, 'WD Blue 4TB HDD', 90.00, 10, 'WD Blue 4TB HDD', 'images/wd_4tb.jpg'),
+(52, 17, 5, 'Seagate 8TB HDD', 140.00, 6, 'Seagate 8TB HDD', 'images/seagate_8tb.jpg'),
+(53, 18, 5, 'Crucial P3 Plus 2TB', 170.00, 4, 'Crucial P3 Plus 2TB', 'images/crucial_2tb.jpg'),
+(54, 6, 6, 'EVGA 850 GQ', 120.00, 8, 'EVGA 850 GQ', 'images/evga_850.jpg'),
+(55, 5, 3, 'ASRock Z790 Pro RS', 240.00, 5, 'ASRock Z790 Pro RS', 'images/asrock_z790.jpg'),
 (56, 7, 7, 'NZXT H9 Flow', 160.00, 3, 'NZXT H9 Flow', 'images/nzxt_h9.jpg'),
 (57, 9, 7, 'Cooler Master MB511 ARGB', 80.00, 9, 'Cooler Master MB511 ARGB', 'images/coolermaster_mb511.jpg'),
-(58, 3, 6, 'MSI Z790 TOMAHAWK', 270.00, 4, 'MSI Z790 TOMAHAWK', 'images/msi_z790.jpg'),
+(58, 3, 3, 'MSI Z790 TOMAHAWK', 270.00, 4, 'MSI Z790 TOMAHAWK', 'images/msi_z790.jpg'),
 (59, 20, 1, 'AMD Ryzen 7 5700G', 170.00, 11, 'AMD Ryzen 7 5700G', 'images/amd_5700g.jpg'),
 (60, 19, 1, 'Intel Core i5-13500', 240.00, 9, 'Intel Core i5-13500', 'images/intel_i5_13500.jpg'),
 (61, 22, 2, 'ZOTAC RTX 4070 Twin Edge', 650.00, 6, 'ZOTAC RTX 4070 Twin Edge', 'images/zotac_4070.jpg'),
 (62, 24, 2, 'Sapphire RX 6800', 530.00, 3, 'Sapphire RX 6800', 'images/sapphire_6800.jpg'),
-(63, 3, 5, 'MSI MPG A1000G 1000W Gold', 170.00, 3, 'MSI MPG A1000G 1000W Gold', 'images/msi_1000w.jpg'),
-(64, 2, 3, 'Corsair Vengeance 32GB DDR5', 135.00, 7, 'Corsair Vengeance 32GB DDR5', 'images/corsair_ddr5.jpg'),
-(65, 13, 3, 'ADATA XPG DDR5 16GB', 85.00, 10, 'ADATA XPG DDR5 16GB', 'images/adata_ddr5.jpg'),
+(63, 3, 6, 'MSI MPG A1000G 1000W Gold', 170.00, 3, 'MSI MPG A1000G 1000W Gold', 'images/msi_1000w.jpg'),
+(64, 2, 4, 'Corsair Vengeance 32GB DDR5', 135.00, 7, 'Corsair Vengeance 32GB DDR5', 'images/corsair_ddr5.jpg'),
+(65, 13, 4, 'ADATA XPG DDR5 16GB', 85.00, 10, 'ADATA XPG DDR5 16GB', 'images/adata_ddr5.jpg'),
 (66, 1, 7, 'ASUS Prime AP201 mATX', 95.00, 5, 'ASUS Prime AP201 mATX', 'images/asus_ap201.jpg'),
-(67, 4, 6, 'Gigabyte B760 AORUS Elite', 160.00, 6, 'Gigabyte B760 AORUS Elite', 'images/gigabyte_b760.jpg'),
-(68, 5, 6, 'ASRock B550M Steel Legend', 120.00, 8, 'ASRock B550M Steel Legend', 'images/asrock_b550m.jpg'),
+(67, 4, 3, 'Gigabyte B760 AORUS Elite', 160.00, 6, 'Gigabyte B760 AORUS Elite', 'images/gigabyte_b760.jpg'),
+(68, 5, 3, 'ASRock B550M Steel Legend', 120.00, 8, 'ASRock B550M Steel Legend', 'images/asrock_b550m.jpg'),
 (69, 9, 7, 'Cooler Master TD500 Mesh', 120.00, 4, 'Cooler Master TD500 Mesh', 'images/td500.jpg'),
 (70, 7, 7, 'NZXT H7 Flow', 150.00, 3, 'NZXT H7 Flow', 'images/nzxt_h7.jpg');
 
@@ -291,7 +313,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`) VALUES
-(1, 'duncanangel070@gmail.com', '[]', '$2y$13$AOHF2qRJcSXP7KhpbJPF3.ANTx4L3My1ID9/2m8kl.f1ubSn0ckU6', 'Duncan', 'Engelen');
+(1, 'duncanangel070@gmail.com', '[]', '$2y$13$AOHF2qRJcSXP7KhpbJPF3.ANTx4L3My1ID9/2m8kl.f1ubSn0ckU6', 'Duncan', 'Engelen'),
+(2, 'leoberghuis@gmail.com', '[]', '$2y$13$qfEwCVH5CIhifP7jBHxhRO2cIRKMhPsQFNesJzgeV2Yt0VjbG49F.', 'Leo', 'Berghuis');
 
 --
 -- Indexes for dumped tables
@@ -307,7 +330,8 @@ ALTER TABLE `brand`
 -- Indexes for table `build`
 --
 ALTER TABLE `build`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_BDA0F2DBA76ED395` (`user_id`);
 
 --
 -- Indexes for table `build_products`
@@ -373,7 +397,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `build`
 --
 ALTER TABLE `build`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -403,11 +427,17 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `build`
+--
+ALTER TABLE `build`
+  ADD CONSTRAINT `FK_BDA0F2DBA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `build_products`

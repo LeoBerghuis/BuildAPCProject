@@ -3,19 +3,27 @@
 {% block title %}Account{% endblock %}
 
 {% block body %}
-<h2>{{ user.firstName }}'s PC Builds</h2>
+    <h2>{{ user.firstName }}'s PC Builds</h2>
 
-{% if user.builds is not empty %}
-    <ul>
-        {% for build in user.builds %}
-            <li>
-                <h3>{{ build.name }}</h3>
-                <p><strong>Created on:</strong> {{ build.createdAt|date('Y-m-d') }}</p>
-                <a href="{{ path('build_show', { id: build.id }) }}">View Details</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>This user hasn't created any builds yet.</p>
-{% endif %}
+    {% if user.builds is not empty %}
+        <ul>
+            {% for build in user.builds %}
+                <li>
+                    <h3>{{ build.name }}</h3>
+                    <p><strong>Created on:</strong> {{ build.createdAt|date('Y-m-d') }}</p>
+                    <div class="d-flex flex-direction-row gap-1">
+                    {% for product in build.products %}
+                        {% set categoryId = product.category.id %}
+                        {% if categoryId == 1 or categoryId == 2 or categoryId == 4 %}
+                            <p>{{ product.name }},</p>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                    {#                <a href="{{ path('build_show', { id: build.id }) }}">View Details</a> #}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>This user hasn't created any builds yet.</p>
+    {% endif %}
 {% endblock %}
