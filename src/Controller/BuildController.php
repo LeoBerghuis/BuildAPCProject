@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Build;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,6 +52,7 @@ final class BuildController extends AbstractController
     #[Route('/cart', name: 'app_cart')]
     public function cart(EntityManagerInterface $entityManager,SessionInterface $session, ProductRepository $productRepository): Response
     {
+        $total = 0;
         $build = $session->get('pc_build', []);
         $categories = $entityManager->getRepository(Category::class)->findAll();
         $products = [];
@@ -61,9 +63,13 @@ final class BuildController extends AbstractController
             }
         }
 
+        foreach ($products as $product) {
+            $total += $product->getPrice();
+        }
         return $this->render('build/cart.html.twig', [
             'build' => $products,
             'categories' => $categories,
+            'total' => $total,
         ]);
     }
 
@@ -72,5 +78,33 @@ final class BuildController extends AbstractController
     {
         $session->remove('pc_build');
         return $this->redirectToRoute('app_build');
+    }
+
+    #[Route('/cart-create', name: 'app_cart_create')]
+    public function cartCreate(SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        $buildData = $session->get('pc_build', []);
+
+        if (empty($buildData)) {
+            return $this->redirectToRoute('app_cart');
+        }
+
+        $newBuild = new Build();
+        $newBuild->setName('testbuild');
+        $newBuild->setIsPublic(true);
+        $newBuild->setCreatedAt(new \DateTime());
+        foreach ($buildData as $productId) {
+            $product = $productRepository->find($productId);
+            if ($product) {
+                $newBuild->addProduct($product);
+            }
+        }
+        $entityManager->persist($newBuild);
+        $entityManager->flush();
+        $session->remove('pc_build');
+        return $this->redirectToRoute('app_home');
     }
 }

@@ -23,10 +23,14 @@
                         <td>${{ product.price }}</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <th>Total Price</th>
+                    <td>${{ total }}</td>
+                </tr>
                 </tbody>
             </table>
         {% endif %}
-
+        <a class="btn btn-primary" href="{{ path('app_cart_create') }}">Create build</a>
         <a class="btn btn-danger" href="{{ path('app_cart_remove') }}">Remove cart</a>
     </div>
 {% endblock %}
