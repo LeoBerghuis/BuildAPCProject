@@ -17,9 +17,6 @@ class Build
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'builds')]
-    private ?Users $user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -33,6 +30,10 @@ class Build
     #[ORM\JoinTable(name: 'build_products')]
     private Collection $products;
 
+    #[ORM\ManyToOne(inversedBy: 'builds')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -42,18 +43,6 @@ class Build
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?Users
-    {
-        return $this->user;
-    }
-
-    public function setUser(?Users $user): static
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -109,6 +98,18 @@ class Build
     public function removeProduct(Products $product): static
     {
         $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

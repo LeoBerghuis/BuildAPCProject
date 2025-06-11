@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+<h2>{{ user.firstName }}'s PC Builds</h2>
+
+{% if user.builds is not empty %}
+    <ul>
+        {% for build in user.builds %}
+            <li>
+                <h3>{{ build.name }}</h3>
+                <p><strong>Created on:</strong> {{ build.createdAt|date('Y-m-d') }}</p>
+                <a href="{{ path('build_show', { id: build.id }) }}">View Details</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>This user hasn't created any builds yet.</p>
+{% endif %}
+{% endblock %}

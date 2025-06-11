@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Build;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,4 +34,18 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
+    #[Route(path: '/account', name: 'app_login')]
+    public function account(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $builds = $entityManager->getRepository(Build::class)->findAll();
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+        return $this->render('security/account.html.twig', [
+            'categories' => $categories,
+            'builds' => $builds,
+            'user' => $user,
+        ]);
+    }
+
 }
