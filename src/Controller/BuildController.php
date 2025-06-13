@@ -105,4 +105,16 @@ final class BuildController extends AbstractController
 
         return $this->redirectToRoute('app_home');
     }
+
+    #[Route('/build-edit/{id}', name: 'app_build_edit')]
+    public function edit(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $build = $entityManager->find(Build::class, $id);
+        dd($build);
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+        return $this->render('build/edit.html.twig', [
+            'categories' => $categories,
+
+        ]);
+    }
 }

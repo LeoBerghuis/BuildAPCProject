@@ -7,9 +7,27 @@
 {% block title %}BuildAPC - Home{% endblock %}
 
 {% block body %}
+    <div class="d-flex flex-column align-items-center h-100">
         <div class="py-5 text-center">
-                <h1 class="display-4">Welcome to BuildAPC</h1>
-                <p class="lead">Plan and build your perfect PC with ease.</p>
-                <a href="/build" class="btn btn-dark btn-lg mt-3">Start Building</a>
+            <h1 class="display-4">Welcome to BuildAPC</h1>
+            <p class="lead">Plan and build your perfect PC with ease.</p>
+            <a href="/build" class="btn btn-dark btn-lg mt-3">Start Building</a>
         </div>
+        <h5>Recommended PC parts</h5>
+        <div class="d-flex flex-direction-row gap-5">
+            {% for product in products %}
+                {% if product.id == 6 or product.id == 10 or product.id == 19 %}
+                    <div class="card" style="width: 18rem;">
+                        <img src="https://dummyimage.com/200x150" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <a href="#" class="btn btn-primary">Buy product</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

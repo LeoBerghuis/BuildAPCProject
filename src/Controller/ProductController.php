@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ProductController extends AbstractController
@@ -46,5 +47,17 @@ final class ProductController extends AbstractController
             'products' => $products
         ]);
     }
+
+    #[Route('/product/add/{id}', name: 'add_to_cart')]
+    public function addToCart(int $id, ProductRepository $productRepository, SessionInterface $session): Response
+    {
+        $product = $productRepository->find($id);
+        $cart = $session->get('pc_build', []);
+        $cart[$product->getCategory()->getName()] = $id;
+        $session->set('pc_build', $cart);
+
+        return $this->redirectToRoute('app_cart');
+    }
+
 
 }

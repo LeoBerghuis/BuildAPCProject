@@ -1,28 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Account{% endblock %}
-
 {% block body %}
     <h2>{{ user.firstName }}'s PC Builds</h2>
 
     {% if user.builds is not empty %}
-        <ul>
+        <table class="table table-striped">
             {% for build in user.builds %}
-                <li>
-                    <h3>{{ build.name }}</h3>
-                    <p><strong>Created on:</strong> {{ build.createdAt|date('Y-m-d') }}</p>
-                    <div class="d-flex flex-direction-row gap-1">
-                    {% for product in build.products %}
-                        {% set categoryId = product.category.id %}
-                        {% if categoryId == 1 or categoryId == 2 or categoryId == 4 %}
-                            <p>{{ product.name }},</p>
-                        {% endif %}
-                    {% endfor %}
-                    </div>
-                    {#                <a href="{{ path('build_show', { id: build.id }) }}">View Details</a> #}
-                </li>
+                <tr>
+                    <th>name</th>
+                    <th>Created</th>
+                    <th>Products</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td>{{ build.name }}</td>
+                    <td><strong>Created on:</strong> {{ build.createdAt|date('Y-m-d') }}</td>
+                    <td>
+                        <div class="d-flex flex-direction-row gap-1">
+                            {% for product in build.products %}
+                                {% set categoryId = product.category.id %}
+                                {% if categoryId == 1 or categoryId == 2 or categoryId == 4 %}
+                                    <p>{{ product.name }},</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+{#                        <a class="btn btn-primary" href="{{ path('build_show', { id: build.id }) }}">View</a>#}
+                        <a class="btn btn-secondary" href="{{ path('app_build_edit', { id: build.id}) }}">Edit build</a>
+                    </td>
+                </tr>
+
             {% endfor %}
-        </ul>
+        </table>
     {% else %}
         <p>This user hasn't created any builds yet.</p>
     {% endif %}
