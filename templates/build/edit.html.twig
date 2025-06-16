@@ -2,4 +2,16 @@
 
 {% block body %}
     <h1>Edit Build</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.cpu) }}
+    {{ form_row(form.gpu) }}
+    {{ form_row(form.motherboard) }}
+    {{ form_row(form.ram) }}
+    {{ form_row(form.memory) }}
+    {{ form_row(form.powersupply) }}
+    {{ form_row(form.case) }}
+    <button type="submit">Save</button>
+    {{ form_end(form) }}
+
 {% endblock %}

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Build;
 use App\Entity\Category;
+use App\Form\BuildEditForm;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,14 +109,68 @@ final class BuildController extends AbstractController
     }
 
     #[Route('/build-edit/{id}', name: 'app_build_edit')]
-    public function edit(int $id, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response {
         $build = $entityManager->find(Build::class, $id);
-        dd($build);
-        $categories = $entityManager->getRepository(Category::class)->findAll();
-        return $this->render('build/edit.html.twig', [
-            'categories' => $categories,
+        $categories = $categoryRepository->findAll();
 
+        $selectedProducts = [
+            'cpu' => null,
+            'gpu' => null,
+            'motherboard' => null,
+            'ram' => null,
+            'memory' => null,
+            'powersupply' => null,
+            'case' => null,
+        ];
+
+        foreach ($build->getProducts() as $product) {
+            $categoryId = $product->getCategory()->getId();
+            match($categoryId) {
+                1 => $selectedProducts['cpu'] = $product,
+                2 => $selectedProducts['gpu'] = $product,
+                3 => $selectedProducts['motherboard'] = $product,
+                4 => $selectedProducts['ram'] = $product,
+                5 => $selectedProducts['memory'] = $product,
+                6 => $selectedProducts['powersupply'] = $product,
+                7 => $selectedProducts['case'] = $product,
+                default => null,
+            };
+        }
+
+        $form = $this->createForm(BuildEditForm::class, $selectedProducts);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Clear old products
+            foreach ($build->getProducts() as $product) {
+                $build->removeProduct($product);
+            }
+
+            // Add new ones
+            foreach ($form->getData() as $product) {
+                if ($product) {
+                    $build->addProduct($product);
+                }
+            }
+
+            $entityManager->flush();
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('build/edit.html.twig', [
+            'form' => $form->createView(),
+            'categories' => $categories,
+            'build' => $build,
         ]);
+    }
+
+    #[Route('/cart-remove/{id}', name: 'app_build_remove')]
+    public function buildRemove(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $build = $entityManager->getRepository(Build::class)->find($id);
+
+        $entityManager->remove($build);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_account');
     }
 }
