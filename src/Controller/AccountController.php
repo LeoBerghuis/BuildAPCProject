@@ -8,7 +8,7 @@ use App\Entity\Comments;
 
 use App\Form\CommentTypeForm;
 use App\Repository\CategoryRepository;
-use App\Service\AccountService;
+use App\service\AccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
