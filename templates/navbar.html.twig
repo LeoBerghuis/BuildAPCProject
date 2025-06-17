@@ -59,6 +59,7 @@
         {% if app.user %}
             <a href="/account" class="btn text-white">Your Builds</a>
         {% endif %}
+        <a href="{{ path('app_builds') }}" class="btn text-white">View all builds</a>
     </div>
     <div class="cart ms-auto me-3">
         <a href="{{ path('app_cart') }}" class="btn text-white position-relative">

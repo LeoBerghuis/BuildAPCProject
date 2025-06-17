@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Products;
 use App\Form\BuildEditForm;
 use App\Repository\CategoryRepository;
+use App\Service\AccountService;
 use App\Service\BuildService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,5 +63,46 @@ final class BuildController extends AbstractController
     {
         $buildService->createCart($session, $productsRepository, $entityManager);
         return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/builds', name: 'app_builds')]
+    public function viewAllBuilds(EntityManagerInterface $entityManager): Response
+    {
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+        $builds = $entityManager->getRepository(Build::class)->findAll();
+        $totalPrice = 0;
+
+        foreach ($builds as $build) {
+            $products = $build->getProducts();
+            foreach ($products as $product) {
+                $totalPrice += $product->getPrice();
+            }
+        }
+
+
+        return $this->render('build/builds.html.twig', [
+            'builds' => $builds,
+            'categories' => $categories,
+            'totalPrice' => $totalPrice,
+        ]);
+    }
+
+    #[Route('/builds/{id}', name: 'app_build_view')]
+    public function viewBuild(EntityManagerInterface $entityManager, AccountService $accountService, int $id, Request $request): Response
+    {
+        [$user, $build, $comments, $categories, $form, $comment] = $accountService->loadBuild($entityManager, $id);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $accountService->postComment($comment, $user, $build, $entityManager);
+            return $this->redirectToRoute('app_build_view', ['id' => $id]);
+        }
+        return $this->render('account/build-view.html.twig', [
+            'categories' => $categories,
+            'build' => $build,
+            'user' => $user,
+            'comments' => $comments,
+            'commentForm' => $form->createView(),
+        ]);
     }
 }

@@ -6,21 +6,25 @@
     gap: 20px;
     font-family: Arial, sans-serif;
 }
+
 .case-image {
     flex: 0 0 250px;
     max-width: 250px;
 }
+
 .case-image img {
     width: 100%;
     height: auto;
     object-fit: contain;
     border-radius: 8px;
 }
+
 .description-comments {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
+
 .description {
     margin-bottom: 20px;
     font-size: 16px;
@@ -29,12 +33,14 @@
     padding: 15px;
     border-radius: 8px;
 }
+
 .comments {
     background: #fff;
     padding: 15px;
     border-radius: 8px;
     min-height: 120px;
 }
+
 .comments p {
     font-size: 1rem;
     line-height: 1.4;
@@ -46,37 +52,44 @@ table.build-parts {
     margin-top: 20px;
     font-size: 16px;
 }
+
 table.build-parts th,
 table.build-parts td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     vertical-align: middle;
 }
+
 table.build-parts th {
     text-align: left;
     width: 100px;
     color: #444;
 }
+
 .part-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
+
 .part-info img {
     height: 50px;
     width: 50px;
     object-fit: contain;
     border-radius: 6px;
 }
+
 .part-details {
     display: flex;
     flex-direction: column;
 }
+
 .part-price {
     font-weight: 600;
     color: #007bff;
     margin-top: 4px;
 }
+
 .publish-date {
     margin-top: 30px;
     text-align: right;
