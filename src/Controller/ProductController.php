@@ -58,6 +58,4 @@ final class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_cart');
     }
-
-
 }

@@ -6,31 +6,41 @@
 
         {% if build is empty %}
             <p>No build selected.</p>
+            <a href="{{ path('app_build') }}" class="btn btn-primary">Create a pc here</a>
         {% else %}
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover align-middle text-center">
+                <thead class="table-dark">
                 <tr>
-                    <th>Component</th>
-                    <th>Product</th>
-                    <th>Price</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Component</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for key, product in build %}
                     <tr>
-                        <td>{{ key|capitalize }}</td>
+                        <td>
+                            <img src="{{ asset('images/' ~ product.category.name ~ '/' ~ product.image ~ '.jpg') }}"
+                                 alt="{{ product.name }}"
+                                 style="height: 65px;"
+                                 class="img-fluid rounded shadow-sm">
+                        </td>
+                        <td class="fw-semibold text-capitalize">{{ key }}</td>
                         <td>{{ product.name }}</td>
                         <td>${{ product.price }}</td>
                     </tr>
                 {% endfor %}
-                <tr>
-                    <th>Total Price</th>
-                    <td>${{ total }}</td>
+
+                <tr class="table-light">
+                    <td colspan="3" class="text-end fw-bold">Total Price</td>
+                    <td class="fw-bold">${{ total }}</td>
                 </tr>
                 </tbody>
             </table>
+
+            <a class="btn btn-primary" href="{{ path('app_cart_create') }}">Create build</a>
+            <a class="btn btn-danger" href="{{ path('app_cart_remove') }}">Remove cart</a>
         {% endif %}
-        <a class="btn btn-primary" href="{{ path('app_cart_create') }}">Create build</a>
-        <a class="btn btn-danger" href="{{ path('app_cart_remove') }}">Remove cart</a>
     </div>
 {% endblock %}

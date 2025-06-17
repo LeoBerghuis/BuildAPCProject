@@ -15,10 +15,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, EntityManagerInterface $entityManager): Response
     {
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $categories = $entityManager->getRepository(Category::class)->findAll();
@@ -32,22 +29,5 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-
-    #[Route(path: '/account', name: 'app_account')]
-    public function account(EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-        $builds = $entityManager->getRepository(Build::class)->findBy(['user' => $user,]);
-        $categories = $entityManager->getRepository(Category::class)->findAll();
-
-        return $this->render('security/account.html.twig', [
-            'categories' => $categories,
-            'builds' => $builds,
-            'user' => $user,
-        ]);
-    }
-
-
 }

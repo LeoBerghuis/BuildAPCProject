@@ -4,33 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Build;
 use App\Entity\Category;
+use App\Entity\Products;
 use App\Form\BuildEditForm;
 use App\Repository\CategoryRepository;
+use App\Service\BuildService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\ProductRepository;
+use App\Repository\ProductsRepository;
 
 final class BuildController extends AbstractController
 {
     #[Route('/build', name: 'app_build')]
-    public function index(Request $request, ProductRepository $productRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    public function index(Request $request, ProductsRepository $productRepository, EntityManagerInterface $entityManager, SessionInterface $session, BuildService $buildService): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
         if ($request->isMethod('POST')) {
-            $session->set('pc_build', [
-                'cpu' => $request->request->get('cpu'),
-                'gpu' => $request->request->get('gpu'),
-                'motherboard' => $request->request->get('motherboard'),
-                'ram' => $request->request->get('ram'),
-                'memory' => $request->request->get('memory'),
-                'powersupply' => $request->request->get('powersupply'),
-                'case' => $request->request->get('case'),
-            ]);
-
+            $buildService->addToSession($request, $session);
             return $this->redirectToRoute('app_cart');
         }
 
@@ -47,22 +40,9 @@ final class BuildController extends AbstractController
     }
 
     #[Route('/cart', name: 'app_cart')]
-    public function cart(EntityManagerInterface $entityManager,SessionInterface $session, ProductRepository $productRepository): Response
+    public function cart(EntityManagerInterface $entityManager, SessionInterface $session, ProductsRepository $productsRepository, BuildService $buildService): Response
     {
-        $total = 0;
-        $build = $session->get('pc_build', []);
-        $categories = $entityManager->getRepository(Category::class)->findAll();
-        $products = [];
-        foreach ($build as $component => $productId) {
-            $product = $productRepository->find($productId);
-            if ($product) {
-                $products[$component] = $product;
-            }
-        }
-
-        foreach ($products as $product) {
-            $total += $product->getPrice();
-        }
+        [$total, $products, $categories] = $buildService->getcartAndTotal($session, $entityManager, $productsRepository);
         return $this->render('build/cart.html.twig', [
             'build' => $products,
             'categories' => $categories,
@@ -71,106 +51,16 @@ final class BuildController extends AbstractController
     }
 
     #[Route('/cart-remove', name: 'app_cart_remove')]
-    public function cartRemove(SessionInterface $session): Response
+    public function cartRemove(SessionInterface $session, BuildService $buildService): Response
     {
-        $session->remove('pc_build');
+        $buildService->removeCartFromSession($session);
         return $this->redirectToRoute('app_build');
     }
 
     #[Route('/cart-create', name: 'app_cart_create')]
-    public function cartCreate(SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $entityManager): Response {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-        $buildData = $session->get('pc_build', []);
-        if (empty($buildData)) {
-            return $this->redirectToRoute('app_cart');
-        }
-        $build = new Build();
-        $build->setUser($user);
-        $build->setName('Build by ' . $user->getUserIdentifier());
-        $build->setIsPublic(true);
-        $build->setCreatedAt(new \DateTime());
-
-        foreach ($buildData as $productId) {
-            $product = $productRepository->find($productId);
-            if ($product) {
-                $build->addProduct($product);
-            }
-        }
-
-        $entityManager->persist($build);
-        $entityManager->flush();
-
-        $session->remove('pc_build');
-
-        return $this->redirectToRoute('app_home');
-    }
-
-    #[Route('/build-edit/{id}', name: 'app_build_edit')]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response {
-        $build = $entityManager->find(Build::class, $id);
-        $categories = $categoryRepository->findAll();
-
-        $selectedProducts = [
-            'cpu' => null,
-            'gpu' => null,
-            'motherboard' => null,
-            'ram' => null,
-            'memory' => null,
-            'powersupply' => null,
-            'case' => null,
-        ];
-
-        foreach ($build->getProducts() as $product) {
-            $categoryId = $product->getCategory()->getId();
-            match($categoryId) {
-                1 => $selectedProducts['cpu'] = $product,
-                2 => $selectedProducts['gpu'] = $product,
-                3 => $selectedProducts['motherboard'] = $product,
-                4 => $selectedProducts['ram'] = $product,
-                5 => $selectedProducts['memory'] = $product,
-                6 => $selectedProducts['powersupply'] = $product,
-                7 => $selectedProducts['case'] = $product,
-                default => null,
-            };
-        }
-
-        $form = $this->createForm(BuildEditForm::class, $selectedProducts);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Clear old products
-            foreach ($build->getProducts() as $product) {
-                $build->removeProduct($product);
-            }
-
-            // Add new ones
-            foreach ($form->getData() as $product) {
-                if ($product) {
-                    $build->addProduct($product);
-                }
-            }
-
-            $entityManager->flush();
-            return $this->redirectToRoute('app_account');
-        }
-
-        return $this->render('build/edit.html.twig', [
-            'form' => $form->createView(),
-            'categories' => $categories,
-            'build' => $build,
-        ]);
-    }
-
-    #[Route('/cart-remove/{id}', name: 'app_build_remove')]
-    public function buildRemove(EntityManagerInterface $entityManager, int $id): Response
+    public function cartCreate(BuildService $buildService, SessionInterface $session, ProductsRepository $productsRepository, EntityManagerInterface $entityManager): Response
     {
-        $build = $entityManager->getRepository(Build::class)->find($id);
-
-        $entityManager->remove($build);
-        $entityManager->flush();
-        return $this->redirectToRoute('app_account');
+        $buildService->createCart($session, $productsRepository, $entityManager);
+        return $this->redirectToRoute('app_home');
     }
 }
