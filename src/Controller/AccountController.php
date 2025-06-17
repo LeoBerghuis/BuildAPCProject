@@ -6,8 +6,10 @@ use App\Entity\Build;
 use App\Entity\Category;
 use App\Entity\Comments;
 
+use App\Entity\User;
 use App\Form\CommentTypeForm;
 use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use App\service\AccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -76,5 +78,37 @@ final class AccountController extends AbstractController
     {
        $accountService->removeBuild($entityManager, $id);
         return $this->redirectToRoute('app_account');
+    }
+
+    #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
+    public function adminDashboard(UserRepository $userRepository, EntityManagerInterface $entityManager, AccountService $accountService): Response
+    {
+        $users = $userRepository->findAll();
+        [$user, $builds, $categories] = $accountService->getUserData($entityManager);
+        return $this->render('account/dashboard.html.twig', [
+            'users' => $users,
+            'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/admin/user/{id}/delete', name: 'admin_user_delete', methods: ['POST'])]
+    public function deleteUser(Request $request, int $id, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $em->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found.');
+        }
+
+// Delete related comments
+        $comments = $em->getRepository(Comment::class)->findBy(['user' => $user]);
+        foreach ($comments as $comment) {
+            $em->remove($comment);
+        }
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('app_admin_dashboard');
     }
 }
