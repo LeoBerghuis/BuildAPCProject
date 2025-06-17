@@ -1,17 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Edit Build</h1>
+    <div class="container mt-5">
+        <div class="card shadow-lg rounded-4">
+            <div class="card-body p-5">
+                <h2 class="mb-4 text-center">Edit Your Build</h2>
 
-    {{ form_start(form) }}
-    {{ form_row(form.cpu) }}
-    {{ form_row(form.gpu) }}
-    {{ form_row(form.motherboard) }}
-    {{ form_row(form.ram) }}
-    {{ form_row(form.memory) }}
-    {{ form_row(form.powersupply) }}
-    {{ form_row(form.case) }}
-    <button type="submit">Save</button>
-    {{ form_end(form) }}
+                {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
 
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ form_row(form.cpu, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.gpu, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.motherboard, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.ram, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.memory, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.powersupply, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.case, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn btn-primary px-4 py-2">💾 Save Build</button>
+                    <a href="{{ path('app_account') }}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

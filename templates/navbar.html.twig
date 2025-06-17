@@ -28,8 +28,8 @@
     </div>
 </nav>
 
-<div class="bg-secondary py-2">
-    <div class="products d-flex">
+<div class="bg-secondary py-2 d-flex align-items-center justify-content-between">
+    <div class="d-flex">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="productsDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,12 +53,16 @@
                     {% endfor %}
                 </div>
             </div>
-
         </div>
 
         <a href="/build" class="btn text-white">Builder</a>
         {% if app.user %}
             <a href="/account" class="btn text-white">Your Builds</a>
         {% endif %}
+    </div>
+    <div class="cart ms-auto me-3">
+        <a href="{{ path('app_cart') }}" class="btn text-white position-relative">
+            <i class="bi bi-cart3 fs-4"></i>
+        </a>
     </div>
 </div>
