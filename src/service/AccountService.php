@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Entity\Build;
 use App\Entity\Category;
+use App\Entity\Comments;
 use App\Form\BuildEditForm;
+use App\Form\CommentTypeForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +21,7 @@ class AccountService extends AbstractController
         return [$user, $builds, $categories];
     }
 
-    public function removeBuild(EntityManagerInterface $entityManager, int $id)
+    public function removeBuild(EntityManagerInterface $entityManager, int $id): void
     {
         $build = $entityManager->getRepository(Build::class)->find($id);
 
@@ -62,20 +64,53 @@ class AccountService extends AbstractController
 
     }
 
-    public function submitEdit(EntityManagerInterface $entityManager, int $id, $form)
+    public function submitEdit(EntityManagerInterface $entityManager, int $id, $form): void
     {
         $build = $entityManager->find(Build::class, $id);
 
-            foreach ($build->getProducts() as $product) {
-                $build->removeProduct($product);
-            }
-
-            foreach ($form->getData() as $product) {
-                if ($product) {
-                    $build->addProduct($product);
-                }
-            }
-
-            $entityManager->flush();
+        foreach ($build->getProducts() as $product) {
+            $build->removeProduct($product);
         }
+
+        foreach ($form->getData() as $product) {
+            if ($product) {
+                $build->addProduct($product);
+            }
+        }
+
+        $entityManager->flush();
+    }
+
+    public function loadBuild(EntityManagerInterface $entityManager, int $id): array
+    {
+        $user = $this->getUser();
+
+        $build = $entityManager->getRepository(Build::class)->find($id);
+
+        $comments = $build->getComments();
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+
+        $comment = new Comments();
+        $form = $this->createForm(CommentTypeForm::class, $comment);
+
+        return [$user, $build, $comments, $categories, $form, $comment];
+    }
+
+    public function postComment(Comments $comment, $user, $build, EntityManagerInterface $entityManager): void
+    {
+        $comment->setUser($user);
+        $comment->setBuild($build);
+        $comment->setCreatedAt(new \DateTime());
+
+        $entityManager->persist($comment);
+        $entityManager->flush();
+    }
+
+    public function removeComment(EntityManagerInterface $entityManager, int $id): void
+    {
+        $comment = $entityManager->getRepository(Comments::class)->find($id);
+
+        $entityManager->remove($comment);
+        $entityManager->flush();
+    }
 }

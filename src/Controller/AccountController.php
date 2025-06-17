@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Build;
 use App\Entity\Category;
-use App\Form\BuildEditForm;
+use App\Entity\Comments;
+
+use App\Form\CommentTypeForm;
 use App\Repository\CategoryRepository;
 use App\Service\AccountService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +21,7 @@ final class AccountController extends AbstractController
     public function account(EntityManagerInterface $entityManager, AccountService $accountService): Response
     {
         [$user, $builds, $categories] = $accountService->getUserData($entityManager);
-
-        return $this->render('security/account.html.twig', [
+        return $this->render('account/index.html.twig', [
             'categories' => $categories,
             'builds' => $builds,
             'user' => $user,
@@ -28,16 +29,29 @@ final class AccountController extends AbstractController
     }
 
     #[Route(path: '/account/build/{id}', name: 'app_build_view')]
-    public function buildView(EntityManagerInterface $entityManager, int $id): Response
+    public function buildView(EntityManagerInterface $entityManager, int $id, Request $request, AccountService $accountService): Response
     {
-        $user = $this->getUser();
-        $builds = $entityManager->getRepository(Build::class)->findBy(['user' => $user,]);
-        $categories = $entityManager->getRepository(Category::class)->findAll();
-        return $this->render('security/account.html.twig', [
+        [$user, $build, $comments, $categories, $form, $comment] = $accountService->loadBuild($entityManager, $id);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $accountService->postComment($comment, $user, $build, $entityManager);
+            return $this->redirectToRoute('app_build_view', ['id' => $id]);
+        }
+        return $this->render('account/build-view.html.twig', [
             'categories' => $categories,
-            'builds' => $builds,
+            'build' => $build,
             'user' => $user,
+            'comments' => $comments,
+            'commentForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/comment-remove/{id}', name: 'app_remove_comment')]
+    public function commentRemove(EntityManagerInterface $entityManager, int $id, AccountService $accountService): Response
+    {
+        $accountService->removeComment($entityManager, $id);
+        return $this->redirectToRoute('app_account');
     }
 
     #[Route('/build-edit/{id}', name: 'app_build_edit')]

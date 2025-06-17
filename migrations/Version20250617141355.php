@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250611101749 extends AbstractMigration
+final class Version20250617141355 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,13 +21,13 @@ final class Version20250611101749 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            ALTER TABLE build ADD user_id INT NOT NULL
+            CREATE TABLE comments (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, build_id INT DEFAULT NULL, content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_5F9E962AA76ED395 (user_id), INDEX IDX_5F9E962A17C13F8B (build_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE build ADD CONSTRAINT FK_BDA0F2DBA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)
+            ALTER TABLE comments ADD CONSTRAINT FK_5F9E962AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_BDA0F2DBA76ED395 ON build (user_id)
+            ALTER TABLE comments ADD CONSTRAINT FK_5F9E962A17C13F8B FOREIGN KEY (build_id) REFERENCES build (id)
         SQL);
     }
 
@@ -35,13 +35,13 @@ final class Version20250611101749 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            ALTER TABLE build DROP FOREIGN KEY FK_BDA0F2DBA76ED395
+            ALTER TABLE comments DROP FOREIGN KEY FK_5F9E962AA76ED395
         SQL);
         $this->addSql(<<<'SQL'
-            DROP INDEX IDX_BDA0F2DBA76ED395 ON build
+            ALTER TABLE comments DROP FOREIGN KEY FK_5F9E962A17C13F8B
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE build DROP user_id
+            DROP TABLE comments
         SQL);
     }
 }

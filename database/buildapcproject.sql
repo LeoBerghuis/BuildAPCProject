@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 02:00 PM
+-- Generation Time: Jun 17, 2025 at 04:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -80,15 +80,17 @@ CREATE TABLE `build` (
   `name` varchar(255) NOT NULL,
   `is_public` tinyint(1) NOT NULL,
   `created_at` date NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `description` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `build`
 --
 
-INSERT INTO `build` (`id`, `name`, `is_public`, `created_at`, `user_id`) VALUES
-(2, 'Build by leoberghuis@gmail.com', 1, '2025-06-16', 2);
+INSERT INTO `build` (`id`, `name`, `is_public`, `created_at`, `user_id`, `description`) VALUES
+(3, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, NULL),
+(4, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -107,13 +109,20 @@ CREATE TABLE `build_products` (
 --
 
 INSERT INTO `build_products` (`build_id`, `products_id`) VALUES
-(2, 4),
-(2, 15),
-(2, 17),
-(2, 27),
-(2, 36),
-(2, 42),
-(2, 63);
+(3, 1),
+(3, 19),
+(3, 28),
+(3, 36),
+(3, 41),
+(3, 47),
+(3, 54),
+(4, 19),
+(4, 25),
+(4, 32),
+(4, 39),
+(4, 43),
+(4, 60),
+(4, 62);
 
 -- --------------------------------------------------------
 
@@ -144,6 +153,21 @@ INSERT INTO `category` (`id`, `name`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `build_id` int(11) DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `doctrine_migration_versions`
 --
 
@@ -164,7 +188,10 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20250604215815', '2025-06-10 07:59:31', 88),
 ('DoctrineMigrations\\Version20250610082343', '2025-06-10 08:24:58', 46),
 ('DoctrineMigrations\\Version20250610082556', '2025-06-10 08:26:00', 6),
-('DoctrineMigrations\\Version20250611101749', '2025-06-11 10:17:58', 48);
+('DoctrineMigrations\\Version20250611101749', '2025-06-11 10:17:58', 48),
+('DoctrineMigrations\\Version20250613082839', '2025-06-17 16:04:16', 13),
+('DoctrineMigrations\\Version20250617140523', '2025-06-17 16:05:42', 9),
+('DoctrineMigrations\\Version20250617141355', '2025-06-17 16:13:57', 208);
 
 -- --------------------------------------------------------
 
@@ -181,21 +208,6 @@ CREATE TABLE `messenger_messages` (
   `created_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
   `available_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
   `delivered_at` datetime DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
-
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `total_price` decimal(10,2) NOT NULL,
-  `order_date` date NOT NULL,
-  `products` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`products`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -348,6 +360,14 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_5F9E962AA76ED395` (`user_id`),
+  ADD KEY `IDX_5F9E962A17C13F8B` (`build_id`);
+
+--
 -- Indexes for table `doctrine_migration_versions`
 --
 ALTER TABLE `doctrine_migration_versions`
@@ -361,12 +381,6 @@ ALTER TABLE `messenger_messages`
   ADD KEY `IDX_75EA56E0FB7336F0` (`queue_name`),
   ADD KEY `IDX_75EA56E0E3BD61CE` (`available_at`),
   ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
@@ -397,7 +411,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `build`
 --
 ALTER TABLE `build`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -406,16 +420,16 @@ ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -445,6 +459,13 @@ ALTER TABLE `build`
 ALTER TABLE `build_products`
   ADD CONSTRAINT `FK_5799002C17C13F8B` FOREIGN KEY (`build_id`) REFERENCES `build` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_5799002C6C8A81A9` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `FK_5F9E962A17C13F8B` FOREIGN KEY (`build_id`) REFERENCES `build` (`id`),
+  ADD CONSTRAINT `FK_5F9E962AA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `products`

@@ -34,9 +34,19 @@ class Build
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    /**
+     * @var Collection<int, Comments>
+     */
+    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'build', cascade: ['remove'])]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -110,6 +120,48 @@ class Build
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setBuild($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getBuild() === $this) {
+                $comment->setBuild(null);
+            }
+        }
 
         return $this;
     }
