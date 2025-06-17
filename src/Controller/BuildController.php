@@ -4,11 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Build;
 use App\Entity\Category;
-use App\Entity\Products;
-use App\Form\BuildEditForm;
-use App\Repository\CategoryRepository;
-use App\service\AccountService;
-use App\service\BuildService;
+use App\Service\AccountService;
+use App\Service\BuildService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,28 +63,51 @@ final class BuildController extends AbstractController
     }
 
     #[Route('/builds', name: 'app_builds')]
-    public function viewAllBuilds(EntityManagerInterface $entityManager): Response
+    public function viewAllBuilds(EntityManagerInterface $entityManager, Request $request, BuildService $buildService): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
         $builds = $entityManager->getRepository(Build::class)->findAll();
+        $selectedCategoryId = $request->query->get('category');
         $totalPrices = [];
+        $requiredCategoryIds = range(1, 7);
+        $filteredBuilds = [];
 
         foreach ($builds as $build) {
+            $buildCategoryIds = [];
+
+            foreach ($build->getProducts() as $product) {
+                $catId = $product->getCategory()->getId();
+                if (!in_array($catId, $buildCategoryIds, true)) {
+                    $buildCategoryIds[] = $catId;
+                }
+            }
+
+
+            if (empty(array_diff($requiredCategoryIds, $buildCategoryIds))) {
+                $filteredBuilds[] = $build;
+            }
+        }
+
+
+        foreach ($filteredBuilds as $build) {
             $totalPrice = 0;
-            $products = $build->getProducts();
-            foreach ($products as $product) {
+            foreach ($build->getProducts() as $product) {
                 $totalPrice += $product->getPrice();
             }
             $totalPrices[$build->getId()] = $totalPrice;
         }
 
+        if ($request->isMethod('GET')) {
+           $buildService->filterBuilds($selectedCategoryId, $filteredBuilds, $totalPrices);
+        }
+
         return $this->render('build/builds.html.twig', [
-            'builds' => $builds,
+            'builds' => $filteredBuilds,
             'categories' => $categories,
+            'selectedCategoryId' => $selectedCategoryId,
             'totalPrices' => $totalPrices,
         ]);
     }
-
 
     #[Route('/builds/{id}', name: 'app_build_view')]
     public function viewBuild(EntityManagerInterface $entityManager, AccountService $accountService, int $id, Request $request): Response

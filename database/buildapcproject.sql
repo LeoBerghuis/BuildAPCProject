@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 06:16 PM
+-- Generation Time: Jun 17, 2025 at 11:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -79,7 +79,7 @@ CREATE TABLE `build` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `is_public` tinyint(1) NOT NULL,
-  `created_at` date NOT NULL,
+  `created_at` datetime NOT NULL,
   `user_id` int(11) NOT NULL,
   `description` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -89,10 +89,12 @@ CREATE TABLE `build` (
 --
 
 INSERT INTO `build` (`id`, `name`, `is_public`, `created_at`, `user_id`, `description`) VALUES
-(3, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'This i'),
-(4, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'sklfsjlkfds'),
-(6, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'QWOOOWOWO'),
-(7, 'Build by testtest@test.test', 1, '2025-06-17', 3, NULL);
+(3, 'Build by leoberghuis@gmail.com', 1, '2025-06-17 00:00:00', 2, 'This i'),
+(4, 'Build by leoberghuis@gmail.com', 1, '2025-06-17 00:00:00', 2, 'sklfsjlkfds'),
+(6, 'Build by leoberghuis@gmail.com', 1, '2025-06-17 00:00:00', 2, 'QWOOOWOWO'),
+(7, 'Build by testtest@test.test', 1, '2025-06-17 00:00:00', 3, NULL),
+(8, 'Build by leoberghuis@gmail.com', 1, '2025-06-17 23:13:29', 2, NULL),
+(9, 'Build by leoberghuis@gmail.com', 1, '2025-06-17 23:17:05', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -138,7 +140,21 @@ INSERT INTO `build_products` (`build_id`, `products_id`) VALUES
 (7, 30),
 (7, 35),
 (7, 51),
-(7, 69);
+(7, 69),
+(8, 4),
+(8, 9),
+(8, 25),
+(8, 32),
+(8, 35),
+(8, 50),
+(8, 66),
+(9, 1),
+(9, 7),
+(9, 16),
+(9, 23),
+(9, 29),
+(9, 34),
+(9, 40);
 
 -- --------------------------------------------------------
 
@@ -215,7 +231,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20250611101749', '2025-06-11 10:17:58', 48),
 ('DoctrineMigrations\\Version20250613082839', '2025-06-17 16:04:16', 13),
 ('DoctrineMigrations\\Version20250617140523', '2025-06-17 16:05:42', 9),
-('DoctrineMigrations\\Version20250617141355', '2025-06-17 16:13:57', 208);
+('DoctrineMigrations\\Version20250617141355', '2025-06-17 16:13:57', 208),
+('DoctrineMigrations\\Version20250617211248', '2025-06-17 23:12:51', 45);
 
 -- --------------------------------------------------------
 
@@ -436,7 +453,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `build`
 --
 ALTER TABLE `build`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `category`

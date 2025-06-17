@@ -2,20 +2,27 @@
 
 {% block body %}
     <div class="container mt-4">
-        <div class="row">
+        <form method="get" action="{{ path('app_builds') }}" class="mb-3">
+            <label for="category" class="form-label">Sort by:</label>
+            <select name="category" id="category" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
+                <option {% if not selectedCategoryId %}selected{% endif %}>Default Order</option>
+                <option value="1" {% if selectedCategoryId == 1 %}selected{% endif %}>Price high to low</option>
+                <option value="2" {% if selectedCategoryId == 2 %}selected{% endif %}>Price low to high</option>
+                <option value="3" {% if selectedCategoryId == 3 %}selected{% endif %}>Oldest first</option>
+                <option value="4" {% if selectedCategoryId == 4 %}selected{% endif %}>Newest first</option>
+            </select>
+        </form>
+        <div class="row d-flex flex-drow gap-3">
             {% for build in builds %}
                 {% if build.isPublic %}
-                    <div class="col-md-4 d-flex justify-content-center">
                         <a href="{{ path('app_build_view', {id: build.id}) }}" class="card build-card text-decoration-none">
                             {% for product in build.products %}
                                 {% if product.category.id == 7 %}
                                     <img src="{{ asset('images/' ~ product.category.name ~ '/' ~ product.image ~ '.jpg') }}" class="card-img-top" alt="{{ build.name }} image" style="max-height: 150px; object-fit: contain;">
                                 {% endif %}
                             {% endfor %}
-
                             <div class="card-body d-flex flex-column">
                                 <h6 class="card-subtitle mb-2 text-muted">By {{ build.user.firstName }} {{ build.user.lastName }}</h6>
-
                                 {% if build.description is not empty %}
                                     <p class="card-text mb-3">{{ build.description }}</p>
                                 {% endif %}
@@ -31,12 +38,10 @@
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
-
                                 <div class="parts-divider"></div>
                                 <div class="total-price">Total Price: ${{ totalPrices[build.id] }}</div>
                             </div>
                         </a>
-                    </div>
                 {% endif %}
             {% endfor %}
         </div>
