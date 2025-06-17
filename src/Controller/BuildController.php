@@ -8,7 +8,7 @@ use App\Entity\Products;
 use App\Form\BuildEditForm;
 use App\Repository\CategoryRepository;
 use App\Service\AccountService;
-use App\Service\BuildService;
+use App\service\BuildService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
