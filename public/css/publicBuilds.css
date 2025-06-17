@@ -1,6 +1,7 @@
 .build-card {
     width: 17rem;
     margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
 .build-card:hover {
@@ -24,7 +25,6 @@
 
 .parts-divider {
     border-top: 1px solid #dee2e6;
-    margin: 1rem 0 0.5rem 0;
 }
 
 .total-price {

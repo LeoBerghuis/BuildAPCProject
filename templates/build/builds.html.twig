@@ -6,7 +6,7 @@
             {% for build in builds %}
                 {% if build.isPublic %}
                     <div class="col-md-4 d-flex justify-content-center">
-                        <a href="{{ path('app_build_view', {id: build.id}) }}" class="card build-card">
+                        <a href="{{ path('app_build_view', {id: build.id}) }}" class="card build-card text-decoration-none">
                             {% for product in build.products %}
                                 {% if product.category.id == 7 %}
                                     <img src="{{ asset('images/' ~ product.category.name ~ '/' ~ product.image ~ '.jpg') }}" class="card-img-top" alt="{{ build.name }} image" style="max-height: 150px; object-fit: contain;">
@@ -19,7 +19,7 @@
                                 {% if build.description is not empty %}
                                     <p class="card-text mb-3">{{ build.description }}</p>
                                 {% endif %}
-
+                                <div class="parts-divider"></div>
                                 <ul class="list-unstyled parts-list">
                                     {% for product in build.products %}
                                         {% if product.category.id == 1 or product.category.id == 2 %}
@@ -33,7 +33,7 @@
                                 </ul>
 
                                 <div class="parts-divider"></div>
-                                <div class="total-price">Total Price: ${{ totalPrice }}</div>
+                                <div class="total-price">Total Price: ${{ totalPrices[build.id] }}</div>
                             </div>
                         </a>
                     </div>

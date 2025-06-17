@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Products;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class BuildEditForm extends AbstractType
@@ -60,6 +62,15 @@ class BuildEditForm extends AbstractType
                 'query_builder' => fn($er) => $er->createQueryBuilder('p')->where('p.category = 7'),
                 'required' => false,
                 'placeholder' => '-- Select Case --',
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'attr' => ['rows' => 4, 'placeholder' => 'Enter a description for your build...'],
+                'label' => 'Build Description',
+            ])
+            ->add('isPublic', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Make this build public',
             ]);
     }
 }

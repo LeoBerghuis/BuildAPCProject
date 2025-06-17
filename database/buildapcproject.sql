@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 04:58 PM
+-- Generation Time: Jun 17, 2025 at 06:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -89,8 +89,10 @@ CREATE TABLE `build` (
 --
 
 INSERT INTO `build` (`id`, `name`, `is_public`, `created_at`, `user_id`, `description`) VALUES
-(3, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, NULL),
-(4, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, NULL);
+(3, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'This i'),
+(4, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'sklfsjlkfds'),
+(6, 'Build by leoberghuis@gmail.com', 1, '2025-06-17', 2, 'QWOOOWOWO'),
+(7, 'Build by testtest@test.test', 1, '2025-06-17', 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -109,7 +111,7 @@ CREATE TABLE `build_products` (
 --
 
 INSERT INTO `build_products` (`build_id`, `products_id`) VALUES
-(3, 1),
+(3, 6),
 (3, 19),
 (3, 28),
 (3, 36),
@@ -122,7 +124,21 @@ INSERT INTO `build_products` (`build_id`, `products_id`) VALUES
 (4, 39),
 (4, 43),
 (4, 60),
-(4, 62);
+(4, 62),
+(6, 5),
+(6, 13),
+(6, 19),
+(6, 24),
+(6, 30),
+(6, 38),
+(6, 70),
+(7, 6),
+(7, 9),
+(7, 22),
+(7, 30),
+(7, 35),
+(7, 51),
+(7, 69);
 
 -- --------------------------------------------------------
 
@@ -164,6 +180,14 @@ CREATE TABLE `comments` (
   `content` longtext NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `user_id`, `build_id`, `content`, `created_at`) VALUES
+(4, 3, 3, 'Get a better GPU!!!!', '2025-06-17 18:13:12'),
+(5, 2, 7, 'WOW SUPER GOOD BUILD', '2025-06-17 18:13:57');
 
 -- --------------------------------------------------------
 
@@ -326,7 +350,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`) VALUES
 (1, 'duncanangel070@gmail.com', '[]', '$2y$13$AOHF2qRJcSXP7KhpbJPF3.ANTx4L3My1ID9/2m8kl.f1ubSn0ckU6', 'Duncan', 'Engelen'),
-(2, 'leoberghuis@gmail.com', '[]', '$2y$13$qfEwCVH5CIhifP7jBHxhRO2cIRKMhPsQFNesJzgeV2Yt0VjbG49F.', 'Leo', 'Berghuis');
+(2, 'leoberghuis@gmail.com', '[]', '$2y$13$qfEwCVH5CIhifP7jBHxhRO2cIRKMhPsQFNesJzgeV2Yt0VjbG49F.', 'Leo', 'Berghuis'),
+(3, 'testtest@test.test', '[]', '$2y$13$pXTT.OpkIEBpZXoiPnSx/.tf6ruI5ZBvpN5Xp7JHz5wyjF0a/ZByi', 'Leo', 'Test test test');
 
 --
 -- Indexes for dumped tables
@@ -411,7 +436,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `build`
 --
 ALTER TABLE `build`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -423,7 +448,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`
@@ -441,7 +466,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

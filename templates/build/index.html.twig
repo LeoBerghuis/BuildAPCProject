@@ -4,7 +4,8 @@
     <div class="container py-5">
         <h1 class="mb-4 text-center">🛠️ Build Your PC</h1>
 
-        <form method="POST" class="card shadow p-4 rounded-4">
+        {% if app.user %}
+        <form method="POST" class="card p-4 rounded-4">
             <div class="row g-4">
                 {% set fields = {
                     'cpu': cpus,
@@ -36,5 +37,12 @@
                 <button type="submit" class="btn btn-primary px-4 py-2">💾 Submit Build</button>
             </div>
         </form>
+        {% else %}
+            <div class="alert alert-info d-flex flex-column flex-sm-row align-items-center gap-3 p-3">
+                <span>Login or register to make an account first!</span>
+                <a href="{{ path('app_register') }}" class="btn btn-primary">Register here</a>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Login here</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

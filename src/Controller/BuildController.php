@@ -70,22 +70,24 @@ final class BuildController extends AbstractController
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
         $builds = $entityManager->getRepository(Build::class)->findAll();
-        $totalPrice = 0;
+        $totalPrices = [];
 
         foreach ($builds as $build) {
+            $totalPrice = 0;
             $products = $build->getProducts();
             foreach ($products as $product) {
                 $totalPrice += $product->getPrice();
             }
+            $totalPrices[$build->getId()] = $totalPrice;
         }
-
 
         return $this->render('build/builds.html.twig', [
             'builds' => $builds,
             'categories' => $categories,
-            'totalPrice' => $totalPrice,
+            'totalPrices' => $totalPrices,
         ]);
     }
+
 
     #[Route('/builds/{id}', name: 'app_build_view')]
     public function viewBuild(EntityManagerInterface $entityManager, AccountService $accountService, int $id, Request $request): Response

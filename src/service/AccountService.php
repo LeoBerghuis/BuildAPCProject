@@ -42,6 +42,8 @@ class AccountService extends AbstractController
             'memory' => null,
             'powersupply' => null,
             'case' => null,
+            'description' => null,
+            'isPublic' => null,
         ];
 
         foreach ($build->getProducts() as $product) {
@@ -57,8 +59,12 @@ class AccountService extends AbstractController
                 default => null,
             };
         }
+        $selectedProducts['description'] = $build->getDescription();
+        $selectedProducts['isPublic'] = $build->isPublic();
 
         $form = $this->createForm(BuildEditForm::class, $selectedProducts);
+
+
 
         return [$build, $categories, $form];
 
@@ -72,14 +78,19 @@ class AccountService extends AbstractController
             $build->removeProduct($product);
         }
 
-        foreach ($form->getData() as $product) {
+        foreach (['cpu', 'gpu', 'motherboard', 'ram', 'memory', 'powersupply', 'case'] as $field) {
+            $product = $form->get($field)->getData();
             if ($product) {
                 $build->addProduct($product);
             }
         }
 
+        $build->setDescription($form->get('description')->getData());
+        $build->setIsPublic($form->get('isPublic')->getData());
         $entityManager->flush();
     }
+
+
 
     public function loadBuild(EntityManagerInterface $entityManager, int $id): array
     {
