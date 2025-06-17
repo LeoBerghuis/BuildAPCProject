@@ -7,7 +7,7 @@ use App\Entity\Category;
 use App\Entity\Products;
 use App\Form\BuildEditForm;
 use App\Repository\CategoryRepository;
-use App\Service\AccountService;
+use App\service\AccountService;
 use App\service\BuildService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
