@@ -51,21 +51,15 @@ class BuildService extends AbstractController
         return [$total, $products, $categories];
     }
 
-    public function removeCartFromSession(SessionInterface $session)
+    public function removeCartFromSession(SessionInterface $session): void
     {
         $session->remove('pc_build');
     }
 
-    public function createCart(SessionInterface $session, ProductsRepository $productsRepository, EntityManagerInterface $entityManager)
+    public function createCart(SessionInterface $session, ProductsRepository $productsRepository, EntityManagerInterface $entityManager): void
     {
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
         $buildData = $session->get('pc_build', []);
-        if (empty($buildData)) {
-            return $this->redirectToRoute('app_cart');
-        }
         $build = new Build();
         $build->setUser($user);
         $build->setName('Build by ' . $user->getUserIdentifier());
@@ -83,5 +77,26 @@ class BuildService extends AbstractController
         $entityManager->flush();
 
         $session->remove('pc_build');
+    }
+
+    public function filterBuilds($selectedCategoryId, array &$builds, array $totalPrices): void
+    {
+        if ($selectedCategoryId == 1) {
+            usort($builds, function ($a, $b) use ($totalPrices) {
+                return $totalPrices[$b->getId()] <=> $totalPrices[$a->getId()];
+            });
+        } elseif ($selectedCategoryId == 2) {
+            usort($builds, function ($a, $b) use ($totalPrices) {
+                return $totalPrices[$a->getId()] <=> $totalPrices[$b->getId()];
+            });
+        } elseif ($selectedCategoryId == 3) {
+            usort($builds, function ($a, $b) {
+                return $a->getCreatedAt() <=> $b->getCreatedAt();
+            });
+        } elseif ($selectedCategoryId == 4) {
+            usort($builds, function ($a, $b) {
+                return $b->getCreatedAt() <=> $a->getCreatedAt();
+            });
+        }
     }
 }

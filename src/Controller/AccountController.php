@@ -2,15 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Build;
-use App\Entity\Category;
-use App\Entity\Comments;
-
 use App\Entity\User;
-use App\Form\CommentTypeForm;
-use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
-use App\service\AccountService;
+use App\Service\AccountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

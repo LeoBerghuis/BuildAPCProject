@@ -23,7 +23,7 @@ class Build
     #[ORM\Column]
     private ?bool $isPublic = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $created_at = null;
 
     #[ORM\ManyToMany(targetEntity: Products::class)]
