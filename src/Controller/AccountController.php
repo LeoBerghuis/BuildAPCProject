@@ -91,23 +91,25 @@ final class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/{id}/delete', name: 'admin_user_delete', methods: ['POST'])]
-    public function deleteUser(Request $request, int $id, EntityManagerInterface $em): RedirectResponse
+    #[Route('/admin/user/{id}/delete', name: 'admin_user_delete')]
+    public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
-        $user = $em->getRepository(User::class)->find($id);
-
+        $user = $entityManager->getRepository(User::class)->find($id);
+        $comments = $entityManager->getRepository(Comments::class)->findBy(['user' => $id]);
+        $builds = $entityManager->getRepository(Build::class)->findBy(['user' => $id]);
         if (!$user) {
             throw $this->createNotFoundException('User not found.');
         }
-
-// Delete related comments
-        $comments = $em->getRepository(Comment::class)->findBy(['user' => $user]);
         foreach ($comments as $comment) {
-            $em->remove($comment);
+            $entityManager->remove($comment);
         }
+        foreach ($builds as $build) {
+            $entityManager->remove($build);
+        }
+        $entityManager->remove($user);
+        $entityManager->flush();
 
-        $em->remove($user);
-        $em->flush();
+        $this->addFlash('success', 'User deleted successfully');
 
         return $this->redirectToRoute('app_admin_dashboard');
     }
